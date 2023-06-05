@@ -167,3 +167,4 @@ onClicked: {
     commonMsg.sendUsernameAndPassword("zhangsan", "123456")
 }
 ```
+### 开发推荐：signals是对象发送的一种通知，slots是接收这种通知的一种方法。后端C++和前端QML都能够以特定方式发送通知和接收通知，我们约定前端QML通过slots函数来向后端C++发送数据，后端C++通过emit signals函数向前端QML发送数据或业务处理结果。类似于常见web系统的request/response模式。
