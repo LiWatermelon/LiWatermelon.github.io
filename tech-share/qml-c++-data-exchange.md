@@ -93,11 +93,75 @@ void CommonMsg::sendUsernameAndPassword(const QString &username, const QString &
 ```c++
 qmlRegisterType<CommonMsg>("UGroundControl.CommonMsg", 1, 0, "CommonMsg");
 ```
-### 前端代码示例：
+#### 前端代码示例：
 ```c++
 import UGroundControl.CommonMsg 1.0
 CommonMsg {
     id: commonMsg
+}
+onClicked: {
+    commonMsg.sendUsernameAndPassword("zhangsan", "123456")
+}
+```
+### 使用场景二：基于场景一，当后端进行用户名密码检查后，将返回结果通知给前端，前端再通过UI元素展示给用户（例如：提示弹框等）
+#### 后端代码示例：
+（1）CommonMsg.h
+```c++
+#ifndef COMMONMSG_H
+#define COMMONMSG_H
+
+#include <QObject>
+#include "stdafx.h"
+
+class CommonMsg : public QObject
+{
+    Q_OBJECT
+    Q_PROPERTY_AUTO(QString,m_name)
+public:
+    explicit CommonMsg(QObject *parent = nullptr);
+
+signals:
+    void loginResult(const QString &result);
+public slots:
+    void sendUsernameAndPassword(const QString &username, const QString &password);
+};
+
+#endif // COMMONMSG_H
+```
+（2）CommonMsg.cpp
+```c++
+#include "back/CommonMsg.h"
+#include <QDebug>
+
+CommonMsg::CommonMsg(QObject *parent)
+    : QObject{parent}
+{
+    this->m_name("初始值");
+}
+
+void CommonMsg::sendUsernameAndPassword(const QString &username, const QString &password){
+    qDebug() << "后端收到用户名：" << username << "，密码：" << password;
+    // 登录业务逻辑
+    if(username == "zhangsan" && password == "123456"){
+        // 通知登录结果
+        emit loginResult("成功");
+    }else{
+        emit loginResult("用户名密码错误");
+    }
+}
+```
+（3）main.cpp
+```c++
+qmlRegisterType<CommonMsg>("UGroundControl.CommonMsg", 1, 0, "CommonMsg");
+```
+#### 前端代码示例：
+```c++
+import UGroundControl.CommonMsg 1.0
+CommonMsg {
+    id: commonMsg
+    onLoginResult: function(data){
+        console.log("登录结果：" + data)
+    }
 }
 onClicked: {
     commonMsg.sendUsernameAndPassword("zhangsan", "123456")
