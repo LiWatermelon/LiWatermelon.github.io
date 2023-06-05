@@ -47,6 +47,59 @@ Text{
 }
 ```
 ### 开发推荐：context->setContextProperty("CommonMsg", &commonMsg);推荐使用引用传参，而非指针传参，避免在QML里面修改commonMsg对象属性值
-## 方式二：设置上下文信息
-### 使用场景：APP启动时，例如用户配置信息或全局通用数据等，由后端加载（从数据库、网络等），QML读取数据进行展示。
 
+## 方式二：信号和槽
+### 使用场景一：用户通过QML前端界面输入数据，输入数据交由后端进行处理和业务逻辑。（例如：用户通过前端登录界面输入用户名、密码，用户名和密码需要传递给后端，后端读取数据库用户数据进行用户名密码检查，来判断本次登录是否有效）
+#### 后端代码示例：
+（1）CommonMsg.h
+```c++
+#ifndef COMMONMSG_H
+#define COMMONMSG_H
+
+#include <QObject>
+#include "stdafx.h"
+
+class CommonMsg : public QObject
+{
+    Q_OBJECT
+    Q_PROPERTY_AUTO(QString,m_name)
+public:
+    explicit CommonMsg(QObject *parent = nullptr);
+
+signals:
+    void loginResult(const QString &new_name);
+public slots:
+    void sendUsernameAndPassword(const QString &username, const QString &password);
+};
+
+#endif // COMMONMSG_H
+```
+（2）CommonMsg.cpp
+```c++
+#include "back/CommonMsg.h"
+#include <QDebug>
+
+CommonMsg::CommonMsg(QObject *parent)
+    : QObject{parent}
+{
+    this->m_name("初始值");
+}
+
+void CommonMsg::sendUsernameAndPassword(const QString &username, const QString &password){
+    qDebug() << "后端收到用户名：" << username << "，密码：" << password;
+}
+```
+（3）main.cpp
+```c++
+qmlRegisterType<CommonMsg>("UGroundControl.CommonMsg", 1, 0, "CommonMsg");
+```
+### 前端代码示例：
+```c++
+import UGroundControl.CommonMsg 1.0
+CommonMsg {
+    id: commonMsg
+}
+onClicked: {
+    commonMsg.sendUsernameAndPassword("zhangsan", "123456")
+}
+```
