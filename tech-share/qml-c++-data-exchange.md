@@ -39,15 +39,13 @@ QQmlApplicationEngine engine;
 QQmlContext *context = engine.rootContext();
 CommonMsg commonMsg; //通用数据
 context->setContextProperty("CommonMsg", &commonMsg);
-```c++
+```
 ### 前端代码示例：
+```c++
 Text{
   text: CommonMsg.m_name
 }
-
-
-
-
-## 设置上下文属性
-### 使用场景：C++后端全局共享信息（主题设置、）
+```
+## 方式二：设置上下文信息
+### 使用场景：APP启动时，例如用户配置信息或全局通用数据等，由后端加载（从数据库、网络等），QML读取数据进行展示。
 
