@@ -8,6 +8,7 @@
 ### 使用场景：APP启动时，例如用户配置信息或全局通用数据等，由后端加载（从数据库、网络等），QML读取数据进行展示。
 ### 后端代码示例：
 （1）CommonMsg.h
+```c++
 #ifndef COMMONMSG_H
 #define COMMONMSG_H
 #include <QObject>
@@ -21,6 +22,7 @@ public:
 };
 #endif // COMMONMSG_H
 （2）CommonMsg.cpp
+```c++
 #include "back/CommonMsg.h"
 #include <QDebug>
 
