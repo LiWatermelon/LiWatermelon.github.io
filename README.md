@@ -9,6 +9,7 @@
 
 ## 技术分享
 ### [QT6.5 Quick QML集成QGIS方案探索](./tech-share/how-to-integrate-qml-qgis.md)
+### [QT6.5 Quick QML和C++交互](./tech-share/qml-c++-data-exchange.md)
 
 ## GPT研究
 
