@@ -21,6 +21,7 @@ public:
     explicit CommonMsg(QObject *parent = nullptr);
 };
 #endif // COMMONMSG_H
+```
 （2）CommonMsg.cpp
 ```c++
 #include "back/CommonMsg.h"
@@ -31,11 +32,14 @@ CommonMsg::CommonMsg(QObject *parent)
 {
     this->m_name("初始值");
 }
+```
 （3）main.cpp
+```c++
 QQmlApplicationEngine engine;
 QQmlContext *context = engine.rootContext();
 CommonMsg commonMsg; //通用数据
 context->setContextProperty("CommonMsg", &commonMsg);
+```c++
 ### 前端代码示例：
 Text{
   text: CommonMsg.m_name
